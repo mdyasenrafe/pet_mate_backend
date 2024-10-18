@@ -9,8 +9,7 @@ const userUpdateSchema = z.object({
     .optional(),
   profilePicture: z
     .string()
-    .min(1, { message: "Profile picture URL cannot be empty" })
-    .optional(),
+    .min(1, { message: "Profile picture URL cannot be empty" }),
 });
 
 export const UserValidations = {
