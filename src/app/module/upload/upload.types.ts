@@ -1,3 +1,3 @@
 export type TUpload = {
-  file: File;
+  file: string;
 };
