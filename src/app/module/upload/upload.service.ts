@@ -1,7 +1,6 @@
 import axios from "axios";
 import config from "../../../config";
 import { TUpload } from "./upload.types";
-const imgbbUploader = require("imgbb-uploader");
 
 const uploadFileToCloud = async (payload: TUpload) => {
   let url = `https://api.cloudinary.com/v1_1/${config.cloudinary_cloud_name}/upload`;
