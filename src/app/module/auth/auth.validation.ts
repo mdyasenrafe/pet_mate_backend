@@ -6,6 +6,9 @@ const userSignupSchema = z.object({
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters long" }),
+  profilePicture: z
+    .string()
+    .min(1, { message: "Profile picture URL cannot be empty" }),
 });
 const userSigninSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),

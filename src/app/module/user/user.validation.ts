@@ -7,6 +7,10 @@ const userUpdateSchema = z.object({
     .string()
     .min(6, "Password must be at least 6 characters long")
     .optional(),
+  profilePicture: z
+    .string()
+    .min(1, { message: "Profile picture URL cannot be empty" })
+    .optional(),
 });
 
 export const UserValidations = {
