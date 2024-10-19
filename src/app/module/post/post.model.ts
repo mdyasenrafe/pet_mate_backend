@@ -33,9 +33,25 @@ const PostSchema = new Schema<TPost>(
       type: Boolean,
       default: false,
     },
-    author: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    upvoteCount: {
+      type: Number,
+      default: 0,
+    },
+    downvoteCount: {
+      type: Number,
+      default: 0,
+    },
+    commentCount: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
 
-const PostModel = model<TPost>("post", PostSchema);
+export const PostModel = model<TPost>("post", PostSchema);

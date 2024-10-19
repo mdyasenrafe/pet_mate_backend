@@ -16,4 +16,7 @@ export type TPost = {
   author: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
+  upvoteCount: number;
+  downvoteCount: number;
+  commentCount: number;
 };
