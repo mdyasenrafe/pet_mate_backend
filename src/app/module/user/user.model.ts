@@ -45,6 +45,9 @@ const userSchema = new Schema<TUser>(
         ref: "user",
       },
     ],
+    isPremium: {
+      type: Boolean,
+    },
   },
   {
     timestamps: true,

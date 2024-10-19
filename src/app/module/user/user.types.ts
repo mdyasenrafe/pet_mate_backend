@@ -10,6 +10,7 @@ export type TUser = {
   profilePicture: string;
   followers: Types.ObjectId[];
   following: Types.ObjectId[];
+  isPremium: boolean;
 };
 
 export type TUserRoles = keyof typeof UserRolesObject;
