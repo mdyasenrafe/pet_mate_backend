@@ -17,7 +17,9 @@ export const createPostHandler = catchAsync(
 export const getPostsHandler = catchAsync(
   async (req: Request, res: Response) => {
     const query = req.query;
-    const { result, meta } = await PostServices.getPosts(query);
+    const userId = req.user?.userId;
+
+    const { result, meta } = await PostServices.getPosts(query, userId);
 
     sendResponse(res, {
       message: "Posts fetched successfully",

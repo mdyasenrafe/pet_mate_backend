@@ -27,10 +27,17 @@ const getRandomPosts = async (limit: number = 10) => {
   return posts;
 };
 
-const getPosts = async (query: Record<string, unknown>) => {
+const getPosts = async (query: Record<string, unknown>, userId?: string) => {
   const searchableFields = ["title", "content"];
+
+  let authorFilter: Record<string, unknown> = {};
+
+  if (userId) {
+    authorFilter = { author: userId };
+  }
+
   const postQuery = new QueryBuilder(
-    PostModel.find()
+    PostModel.find(authorFilter)
       .populate("author")
       .populate("upvotedBy")
       .populate("downvotedBy"),
@@ -44,6 +51,10 @@ const getPosts = async (query: Record<string, unknown>) => {
 
   const result = await postQuery.modelQuery;
   const meta = await postQuery.countTotal();
+
+  if (!result.length) {
+    throw new AppError(httpStatus.NOT_FOUND, "No posts found.");
+  }
 
   return {
     result,
