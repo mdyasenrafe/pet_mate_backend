@@ -79,13 +79,25 @@ const deletePost = async (postId: string, userId: Types.ObjectId) => {
   return deletedPost;
 };
 
-// Upvote a post
 const upvotePost = async (postId: string, userId: Types.ObjectId) => {
   const post = await PostModel.findById(postId);
   if (!post?._id) {
-    throw new AppError(httpStatus.NOT_FOUND, "Post not found.");
+    throw new AppError(httpStatus.NOT_FOUND, "This post does not exist.");
   }
 
+  // If the user has downvoted, remove the downvote first
+  if (post.downvotedBy.includes(userId)) {
+    await PostModel.findByIdAndUpdate(
+      postId,
+      {
+        $inc: { downvoteCount: -1 },
+        $pull: { downvotedBy: userId },
+      },
+      { new: true }
+    );
+  }
+
+  // If the user has already upvoted, just return the post
   if (post.upvotedBy.includes(userId)) {
     throw new AppError(
       httpStatus.CONFLICT,
@@ -109,9 +121,22 @@ const upvotePost = async (postId: string, userId: Types.ObjectId) => {
 const downvotePost = async (postId: string, userId: Types.ObjectId) => {
   const post = await PostModel.findById(postId);
   if (!post) {
-    throw new AppError(httpStatus.NOT_FOUND, "Post not found.");
+    throw new AppError(httpStatus.NOT_FOUND, "This post does not exist.");
   }
 
+  // If the user has upvoted, remove the upvote first
+  if (post.upvotedBy.includes(userId)) {
+    await PostModel.findByIdAndUpdate(
+      postId,
+      {
+        $inc: { upvoteCount: -1 },
+        $pull: { upvotedBy: userId },
+      },
+      { new: true }
+    );
+  }
+
+  // If the user has already downvoted, just return the post
   if (post.downvotedBy.includes(userId)) {
     throw new AppError(
       httpStatus.CONFLICT,
