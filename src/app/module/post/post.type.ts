@@ -8,6 +8,7 @@ export type TFile = {
 };
 
 export type TPost = {
+  _id: string;
   title: string;
   content: string;
   category: string;
