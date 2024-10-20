@@ -20,4 +20,6 @@ export type TPost = {
   upvoteCount: number;
   downvoteCount: number;
   commentCount: number;
+  upvotedBy: mongoose.Types.ObjectId[];
+  downvotedBy: mongoose.Types.ObjectId[];
 };

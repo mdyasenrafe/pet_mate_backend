@@ -50,6 +50,18 @@ const PostSchema = new Schema<TPost>(
       type: Number,
       default: 0,
     },
+    upvotedBy: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    downvotedBy: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   { timestamps: true }
 );
