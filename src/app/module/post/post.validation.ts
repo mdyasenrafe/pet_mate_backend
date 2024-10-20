@@ -9,7 +9,7 @@ const createPostValidation = z.object({
   title: z.string().min(1, "Title is required"),
   content: z.string().min(1, "Content is required"),
   category: z.enum(["tip", "story"]),
-  files: z.array(fileSchema),
+  files: z.array(fileSchema).optional(),
   monetization: z.boolean().default(false),
 });
 
