@@ -55,19 +55,34 @@ const updatePost = async (data: TPost, userId: Types.ObjectId) => {
   return updatedPost;
 };
 
-// Delete a post
 const deletePost = async (postId: string, userId: Types.ObjectId) => {
-  const post = await PostModel.findOneAndUpdate(
+  const post = await PostModel.findById(postId);
+
+  if (!post) {
+    throw new AppError(httpStatus.NOT_FOUND, "Post not found.");
+  }
+
+  if (post.author.toString() !== userId.toString()) {
+    throw new AppError(
+      httpStatus.FORBIDDEN,
+      "You are not authorized to delete this post."
+    );
+  }
+
+  const deletedPost = await PostModel.findOneAndUpdate(
     { _id: postId, author: userId },
     { status: "deleted" },
     { new: true }
   );
 
-  if (!post) {
-    throw new AppError(httpStatus.NOT_FOUND, "Post not found or unauthorized.");
+  if (!deletedPost) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      "Post not found or already deleted."
+    );
   }
 
-  return post;
+  return deletedPost;
 };
 
 // Upvote a post
