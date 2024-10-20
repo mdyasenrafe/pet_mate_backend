@@ -33,7 +33,7 @@ const PostSchema = new Schema<TPost>(
     },
     author: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "user",
       required: true,
     },
     upvoteCount: {
@@ -51,13 +51,13 @@ const PostSchema = new Schema<TPost>(
     upvotedBy: [
       {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: "user",
       },
     ],
     downvotedBy: [
       {
         type: Schema.Types.ObjectId,
-        ref: "User",
+        ref: "user",
       },
     ],
     status: {
