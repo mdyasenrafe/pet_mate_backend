@@ -20,12 +20,12 @@ const checkPremiumAccess = async (userId: Types.ObjectId) => {
   }
 };
 
-export const getRandomPosts = async (limit: number = 10) => {
+const getRandomPosts = async (limit: number = 10) => {
   const posts = await PostModel.aggregate([{ $sample: { size: limit } }]);
   return posts;
 };
 
-export const createPost = async (data: TPost, userId: Types.ObjectId) => {
+const createPost = async (data: TPost, userId: Types.ObjectId) => {
   data["author"] = userId;
   if (data.monetization) {
     checkPremiumAccess(userId);
@@ -37,9 +37,9 @@ export const createPost = async (data: TPost, userId: Types.ObjectId) => {
 };
 
 // Update a post
-export const updatePost = async (data: TPost, user: Types.ObjectId) => {
+const updatePost = async (data: TPost, userId: Types.ObjectId) => {
   if (data?.monetization) {
-    checkPremiumAccess(user);
+    checkPremiumAccess(userId);
   }
 
   const updatedPost = await PostModel.findByIdAndUpdate(data._id, data, {
@@ -50,8 +50,7 @@ export const updatePost = async (data: TPost, user: Types.ObjectId) => {
 };
 
 // Delete a post
-
-export const deletePost = async (postId: string, userId: Types.ObjectId) => {
+const deletePost = async (postId: string, userId: Types.ObjectId) => {
   const post = await PostModel.findOneAndUpdate(
     { _id: postId, author: userId },
     { status: "deleted" },
@@ -66,10 +65,7 @@ export const deletePost = async (postId: string, userId: Types.ObjectId) => {
 };
 
 // Upvote a post
-export const upvotePost = async (
-  postId: Types.ObjectId,
-  userId: Types.ObjectId
-) => {
+const upvotePost = async (postId: string, userId: Types.ObjectId) => {
   const post = await PostModel.findById(postId);
   if (!post) {
     throw new AppError(httpStatus.NOT_FOUND, "Post not found.");
@@ -95,10 +91,7 @@ export const upvotePost = async (
 };
 
 // Downvote a post
-export const downvotePost = async (
-  postId: Types.ObjectId,
-  userId: Types.ObjectId
-) => {
+const downvotePost = async (postId: string, userId: Types.ObjectId) => {
   const post = await PostModel.findById(postId);
   if (!post) {
     throw new AppError(httpStatus.NOT_FOUND, "Post not found.");
@@ -121,4 +114,13 @@ export const downvotePost = async (
   );
 
   return updatedPost;
+};
+
+export const PostServices = {
+  getRandomPosts,
+  createPost,
+  deletePost,
+  updatePost,
+  upvotePost,
+  downvotePost,
 };
