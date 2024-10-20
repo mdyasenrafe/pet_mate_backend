@@ -28,6 +28,7 @@ const getRandomPosts = async (limit: number = 10) => {
 };
 
 const getPosts = async (query: Record<string, unknown>, userId?: string) => {
+  console.log("userId =>", userId);
   const searchableFields = ["title", "content"];
 
   let authorFilter: Record<string, unknown> = {};
