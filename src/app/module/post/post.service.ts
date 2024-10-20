@@ -4,6 +4,7 @@ import { PostModel } from "./post.model";
 import mongoose, { Types } from "mongoose";
 import { UserModel } from "../user/user.model";
 import { AppError } from "../../errors/AppError";
+import QueryBuilder from "../../builder/queryBuilder";
 
 const checkPremiumAccess = async (userId: Types.ObjectId) => {
   const user = await UserModel.findById(userId);
@@ -24,6 +25,30 @@ const checkPremiumAccess = async (userId: Types.ObjectId) => {
 const getRandomPosts = async (limit: number = 10) => {
   const posts = await PostModel.aggregate([{ $sample: { size: limit } }]);
   return posts;
+};
+
+const getPosts = async (query: Record<string, unknown>) => {
+  const searchableFields = ["title", "content"];
+  const postQuery = new QueryBuilder(
+    PostModel.find()
+      .populate("author")
+      .populate("upvotedBy")
+      .populate("downvotedBy"),
+    query
+  )
+    .search(searchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await postQuery.modelQuery;
+  const meta = await postQuery.countTotal();
+
+  return {
+    result,
+    meta,
+  };
 };
 
 const createPost = async (data: TPost, userId: Types.ObjectId) => {
@@ -158,6 +183,7 @@ const downvotePost = async (postId: string, userId: Types.ObjectId) => {
 
 export const PostServices = {
   getRandomPosts,
+  getPosts,
   createPost,
   deletePost,
   updatePost,

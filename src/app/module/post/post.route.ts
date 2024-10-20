@@ -6,6 +6,7 @@ import {
   getRandomPostsHandler,
   upvotePostHandler,
   downvotePostHandler,
+  getPostsHandler,
 } from "./post.controller";
 import { authenticateToken } from "../../middlewares/authMiddleware";
 import { UserRolesObject } from "../user/user.constant";
@@ -14,7 +15,8 @@ import { PostValidations } from "./post.validation";
 
 const router = Router();
 
-router.get("/random", getRandomPostsHandler);
+// Public route to get all posts (if applicable)
+router.get("/", getPostsHandler);
 
 router.use(authenticateToken(UserRolesObject.admin, UserRolesObject.user));
 
