@@ -28,7 +28,7 @@ export const updatePostHandler = catchAsync(
 export const deletePostHandler = catchAsync(
   async (req: Request, res: Response) => {
     const postId = req.params.postId;
-    const userId = req.user._id;
+    const userId = req.user.userId;
     const post = await PostServices.deletePost(postId, userId);
     sendResponse(res, {
       message: "Post deleted successfully",
@@ -50,7 +50,7 @@ export const getRandomPostsHandler = catchAsync(
 export const upvotePostHandler = catchAsync(
   async (req: Request, res: Response) => {
     const postId = req.params.postId;
-    const userId = req.user._id;
+    const userId = req.user.userId;
     const post = await PostServices.upvotePost(postId, userId);
     sendResponse(res, { message: "Post upvoted", data: post });
   }
@@ -59,7 +59,7 @@ export const upvotePostHandler = catchAsync(
 export const downvotePostHandler = catchAsync(
   async (req: Request, res: Response) => {
     const postId = req.params.postId;
-    const userId = req.user._id;
+    const userId = req.user.userId;
     const post = await PostServices.downvotePost(postId, userId);
     sendResponse(res, {
       message: "Post downvoted",

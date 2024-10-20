@@ -1,7 +1,7 @@
 import httpStatus from "http-status";
 import { TPost } from "./post.type";
 import { PostModel } from "./post.model";
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { UserModel } from "../user/user.model";
 import { AppError } from "../../errors/AppError";
 
@@ -56,17 +56,11 @@ const updatePost = async (data: TPost, userId: Types.ObjectId) => {
 };
 
 const deletePost = async (postId: string, userId: Types.ObjectId) => {
+  console.log("userId", userId);
   const post = await PostModel.findById(postId);
 
   if (!post) {
     throw new AppError(httpStatus.NOT_FOUND, "Post not found.");
-  }
-
-  if (post.author.toString() !== userId.toString()) {
-    throw new AppError(
-      httpStatus.FORBIDDEN,
-      "You are not authorized to delete this post."
-    );
   }
 
   const deletedPost = await PostModel.findOneAndUpdate(
@@ -77,8 +71,8 @@ const deletePost = async (postId: string, userId: Types.ObjectId) => {
 
   if (!deletedPost) {
     throw new AppError(
-      httpStatus.NOT_FOUND,
-      "Post not found or already deleted."
+      httpStatus.FORBIDDEN,
+      "You are not authorized to delete this post, or the post may already be deleted."
     );
   }
 
