@@ -18,6 +18,7 @@ const checkPremiumAccess = async (userId: Types.ObjectId) => {
       "You must be a premium user to perform this action."
     );
   }
+  return;
 };
 
 const getRandomPosts = async (limit: number = 10) => {
@@ -28,7 +29,7 @@ const getRandomPosts = async (limit: number = 10) => {
 const createPost = async (data: TPost, userId: Types.ObjectId) => {
   data["author"] = userId;
   if (data.monetization) {
-    checkPremiumAccess(userId);
+    await checkPremiumAccess(userId);
   }
 
   const post = await PostModel.create(data);
@@ -39,7 +40,7 @@ const createPost = async (data: TPost, userId: Types.ObjectId) => {
 // Update a post
 const updatePost = async (data: TPost, userId: Types.ObjectId) => {
   if (data?.monetization) {
-    checkPremiumAccess(userId);
+    await checkPremiumAccess(userId);
   }
 
   const updatedPost = await PostModel.findByIdAndUpdate(data._id, data, {
