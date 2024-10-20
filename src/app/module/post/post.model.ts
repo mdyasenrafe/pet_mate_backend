@@ -4,12 +4,10 @@ import { TFile, TPost } from "./post.type";
 const FileSchema = new Schema<TFile>({
   url: {
     type: String,
-    required: true,
   },
   type: {
     type: String,
     enum: ["image", "pdf"],
-    required: true,
   },
 });
 
