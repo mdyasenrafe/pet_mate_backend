@@ -14,7 +14,7 @@ const createPostValidation = z.object({
 });
 
 const updatePostValidation = z.object({
-  postId: z.string().nonempty("postId is required"),
+  _id: z.string().min(1, "_id is required"),
   title: z.string().optional(),
   content: z.string().optional(),
   category: z.enum(["tip", "story"]).optional(),
