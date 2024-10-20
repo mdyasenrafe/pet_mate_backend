@@ -28,7 +28,7 @@ const getPosts = async (query: Record<string, unknown>, userId?: string) => {
   let authorFilter: Record<string, unknown> = {};
 
   if (userId) {
-    authorFilter = { author: userId };
+    authorFilter = { author: { $ne: userId } };
   }
 
   const postQuery = new QueryBuilder(
