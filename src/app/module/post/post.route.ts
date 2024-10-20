@@ -14,12 +14,13 @@ import { validateRequest } from "../../middlewares/validateRequest";
 import { PostValidations } from "./post.validation";
 
 const router = Router();
+// public routes
+router.get("/random", getRandomPostsHandler);
 
-// Public route to get all posts (if applicable)
-router.get("/", getPostsHandler);
-
+// private routes
 router.use(authenticateToken(UserRolesObject.admin, UserRolesObject.user));
 
+router.get("/", getPostsHandler);
 router.post(
   "/",
   validateRequest(PostValidations.createPostValidation),

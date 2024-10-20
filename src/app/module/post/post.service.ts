@@ -22,13 +22,7 @@ const checkPremiumAccess = async (userId: Types.ObjectId) => {
   return;
 };
 
-const getRandomPosts = async (limit: number = 10) => {
-  const posts = await PostModel.aggregate([{ $sample: { size: limit } }]);
-  return posts;
-};
-
 const getPosts = async (query: Record<string, unknown>, userId?: string) => {
-  console.log("userId =>", userId);
   const searchableFields = ["title", "content"];
 
   let authorFilter: Record<string, unknown> = {};
@@ -74,7 +68,6 @@ const createPost = async (data: TPost, userId: Types.ObjectId) => {
   return post;
 };
 
-// Update a post
 const updatePost = async (data: TPost, userId: Types.ObjectId) => {
   if (data?.monetization) {
     await checkPremiumAccess(userId);
@@ -122,7 +115,6 @@ const upvotePost = async (postId: string, userId: Types.ObjectId) => {
     throw new AppError(httpStatus.NOT_FOUND, "This post does not exist.");
   }
 
-  // If the user has downvoted, remove the downvote first
   if (post.downvotedBy.includes(userId)) {
     await PostModel.findByIdAndUpdate(
       postId,
@@ -134,7 +126,6 @@ const upvotePost = async (postId: string, userId: Types.ObjectId) => {
     );
   }
 
-  // If the user has already upvoted, just return the post
   if (post.upvotedBy.includes(userId)) {
     throw new AppError(
       httpStatus.CONFLICT,
@@ -154,14 +145,12 @@ const upvotePost = async (postId: string, userId: Types.ObjectId) => {
   return updatedPost;
 };
 
-// Downvote a post
 const downvotePost = async (postId: string, userId: Types.ObjectId) => {
   const post = await PostModel.findById(postId);
   if (!post) {
     throw new AppError(httpStatus.NOT_FOUND, "This post does not exist.");
   }
 
-  // If the user has upvoted, remove the upvote first
   if (post.upvotedBy.includes(userId)) {
     await PostModel.findByIdAndUpdate(
       postId,
@@ -173,7 +162,6 @@ const downvotePost = async (postId: string, userId: Types.ObjectId) => {
     );
   }
 
-  // If the user has already downvoted, just return the post
   if (post.downvotedBy.includes(userId)) {
     throw new AppError(
       httpStatus.CONFLICT,
@@ -194,7 +182,6 @@ const downvotePost = async (postId: string, userId: Types.ObjectId) => {
 };
 
 export const PostServices = {
-  getRandomPosts,
   getPosts,
   createPost,
   deletePost,
