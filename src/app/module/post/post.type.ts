@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
 type TFileType = "image" | "pdf";
+export type TPostStatus = "published" | "deleted";
+
 export type TFile = {
   _id: string;
   url: string;
@@ -22,4 +24,5 @@ export type TPost = {
   commentCount: number;
   upvotedBy: mongoose.Types.ObjectId[];
   downvotedBy: mongoose.Types.ObjectId[];
+  status: TPostStatus;
 };

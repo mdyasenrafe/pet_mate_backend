@@ -7,7 +7,12 @@ import { AppError } from "../../errors/AppError";
 
 const checkPremiumAccess = async (userId: Types.ObjectId) => {
   const user = await UserModel.findById(userId);
-  if (user?.isPremium) {
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found.");
+  }
+
+  if (!user.isPremium) {
     throw new AppError(
       httpStatus.FORBIDDEN,
       "You must be a premium user to perform this action."
@@ -15,19 +20,11 @@ const checkPremiumAccess = async (userId: Types.ObjectId) => {
   }
 };
 
-// Get random posts
 export const getRandomPosts = async (limit: number = 10) => {
   const posts = await PostModel.aggregate([{ $sample: { size: limit } }]);
-  if (!posts) {
-    throw new AppError(
-      httpStatus.INTERNAL_SERVER_ERROR,
-      "Failed to fetch random posts."
-    );
-  }
   return posts;
 };
 
-// Create a new post
 export const createPost = async (data: TPost, userId: Types.ObjectId) => {
   data["author"] = userId;
   if (data.monetization) {
@@ -35,13 +32,6 @@ export const createPost = async (data: TPost, userId: Types.ObjectId) => {
   }
 
   const post = await PostModel.create(data);
-
-  if (!post?._id) {
-    throw new AppError(
-      httpStatus.INTERNAL_SERVER_ERROR,
-      "Failed to create post."
-    );
-  }
 
   return post;
 };
@@ -56,49 +46,79 @@ export const updatePost = async (data: TPost, user: Types.ObjectId) => {
     new: true,
   });
 
-  if (!updatedPost) {
-    throw new AppError(
-      httpStatus.INTERNAL_SERVER_ERROR,
-      "Failed to update post."
-    );
-  }
-
   return updatedPost;
 };
 
 // Delete a post
-// export const deletePost = async (postId: string, userId: Types.ObjectId) => {
-//   const post = await PostModel.findOneAndDelete({ _id: postId, author:userId });
 
-//   if (!post) {
-//     throw new AppError(httpStatus.NOT_FOUND, "Post not found or unauthorized.");
-//   }
+export const deletePost = async (postId: string, userId: Types.ObjectId) => {
+  const post = await PostModel.findOneAndUpdate(
+    { _id: postId, author: userId },
+    { status: "deleted" },
+    { new: true }
+  );
 
-//   return post;
-// };
+  if (!post) {
+    throw new AppError(httpStatus.NOT_FOUND, "Post not found or unauthorized.");
+  }
+
+  return post;
+};
 
 // Upvote a post
-// export const upvotePost = async (postId: Types.ObjectId) => {
-//   const post = await PostModel.findByIdAndUpdate(
-//     postId,
-//     { $inc: { upvoteCount: 1 } },
-//     { new: true }
-//   );
+export const upvotePost = async (
+  postId: Types.ObjectId,
+  userId: Types.ObjectId
+) => {
+  const post = await PostModel.findById(postId);
+  if (!post) {
+    throw new AppError(httpStatus.NOT_FOUND, "Post not found.");
+  }
 
-//   if (!post) {
-//     throw new AppError(httpStatus.NOT_FOUND, "Post not found.");
-//   }
+  if (post.upvotedBy.includes(userId)) {
+    throw new AppError(
+      httpStatus.CONFLICT,
+      "You have already upvoted this post."
+    );
+  }
 
-//   return post;
-// };
+  const updatedPost = await PostModel.findByIdAndUpdate(
+    postId,
+    {
+      $inc: { upvoteCount: 1 },
+      $addToSet: { upvotedBy: userId },
+    },
+    { new: true }
+  );
 
-// // Downvote a post
-// export const downvotePost = async (postId: string) => {
-//   const post = await Post.findByIdAndUpdate(postId, { $inc: { downvoteCount: 1 } }, { new: true });
+  return updatedPost;
+};
 
-//   if (!post) {
-//     throw new AppError(httpStatus.NOT_FOUND, "Post not found.");
-//   }
+// Downvote a post
+export const downvotePost = async (
+  postId: Types.ObjectId,
+  userId: Types.ObjectId
+) => {
+  const post = await PostModel.findById(postId);
+  if (!post) {
+    throw new AppError(httpStatus.NOT_FOUND, "Post not found.");
+  }
 
-//   return post;
-// };
+  if (post.downvotedBy.includes(userId)) {
+    throw new AppError(
+      httpStatus.CONFLICT,
+      "You have already downvoted this post."
+    );
+  }
+
+  const updatedPost = await PostModel.findByIdAndUpdate(
+    postId,
+    {
+      $inc: { downvoteCount: 1 },
+      $addToSet: { downvotedBy: userId },
+    },
+    { new: true }
+  );
+
+  return updatedPost;
+};

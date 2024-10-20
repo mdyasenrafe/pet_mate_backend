@@ -62,6 +62,11 @@ const PostSchema = new Schema<TPost>(
         ref: "User",
       },
     ],
+    status: {
+      type: String,
+      enum: ["published", "deleted"],
+      default: "published",
+    },
   },
   { timestamps: true }
 );

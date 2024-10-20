@@ -31,6 +31,12 @@ export const authenticateToken = (...requiredRoles: TUserRoles[]) => {
           "User not found: The user associated with this token could not be found."
         );
       }
+      if (user.status === "deleted") {
+        throw new AppError(
+          httpStatus.FORBIDDEN,
+          "Access denied: This user has been deleted."
+        );
+      }
     } else {
       throw new AppError(
         httpStatus.UNAUTHORIZED,
