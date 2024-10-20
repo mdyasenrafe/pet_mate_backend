@@ -43,6 +43,11 @@ const updatePost = async (data: TPost, userId: Types.ObjectId) => {
     await checkPremiumAccess(userId);
   }
 
+  const post = await PostModel.findById(data?._id);
+  if (!post?._id) {
+    throw new AppError(httpStatus.NOT_FOUND, "Post not found.");
+  }
+
   const updatedPost = await PostModel.findByIdAndUpdate(data._id, data, {
     new: true,
   });
@@ -68,7 +73,7 @@ const deletePost = async (postId: string, userId: Types.ObjectId) => {
 // Upvote a post
 const upvotePost = async (postId: string, userId: Types.ObjectId) => {
   const post = await PostModel.findById(postId);
-  if (!post) {
+  if (!post?._id) {
     throw new AppError(httpStatus.NOT_FOUND, "Post not found.");
   }
 
