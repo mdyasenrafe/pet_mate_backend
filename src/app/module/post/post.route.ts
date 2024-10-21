@@ -7,6 +7,7 @@ import {
   upvotePostHandler,
   downvotePostHandler,
   getPostsHandler,
+  undoVoteHandler,
 } from "./post.controller";
 import { authenticateToken } from "../../middlewares/authMiddleware";
 import { UserRolesObject } from "../user/user.constant";
@@ -34,5 +35,6 @@ router.put(
 router.delete("/:postId", deletePostHandler);
 router.post("/:postId/upvote", upvotePostHandler);
 router.post("/:postId/downvote", downvotePostHandler);
+router.post("/:postId/undo-vote", undoVoteHandler);
 
 export const PostRoutes = router;
