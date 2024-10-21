@@ -84,3 +84,18 @@ export const downvotePostHandler = catchAsync(
     });
   }
 );
+
+export const undoVoteHandler = catchAsync(
+  async (req: Request, res: Response) => {
+    const postId = req.params.postId;
+    const userId = req.user.userId;
+    const voteType = req.query.type as string;
+
+    const post = await PostServices.undoVote(postId, userId, voteType);
+
+    sendResponse(res, {
+      message: `${voteType === "upvote" ? "Upvote" : "Downvote"} removed successfully`,
+      data: post,
+    });
+  }
+);
