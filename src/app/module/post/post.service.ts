@@ -181,6 +181,58 @@ const downvotePost = async (postId: string, userId: Types.ObjectId) => {
   return updatedPost;
 };
 
+const undoVote = async (
+  postId: string,
+  userId: Types.ObjectId,
+  voteType: string
+) => {
+  const post = await PostModel.findById(postId);
+
+  if (!post) {
+    throw new AppError(httpStatus.NOT_FOUND, "This post does not exist.");
+  }
+
+  if (voteType === "upvote") {
+    if (!post.upvotedBy.includes(userId)) {
+      throw new AppError(
+        httpStatus.CONFLICT,
+        "You have not upvoted this post."
+      );
+    }
+
+    const updatedPost = await PostModel.findByIdAndUpdate(
+      postId,
+      {
+        $inc: { upvoteCount: -1 },
+        $pull: { upvotedBy: userId },
+      },
+      { new: true }
+    );
+
+    return updatedPost;
+  } else if (voteType === "downvote") {
+    if (!post.downvotedBy.includes(userId)) {
+      throw new AppError(
+        httpStatus.CONFLICT,
+        "You have not downvoted this post."
+      );
+    }
+
+    const updatedPost = await PostModel.findByIdAndUpdate(
+      postId,
+      {
+        $inc: { downvoteCount: -1 },
+        $pull: { downvotedBy: userId },
+      },
+      { new: true }
+    );
+
+    return updatedPost;
+  } else {
+    throw new AppError(httpStatus.BAD_REQUEST, "Invalid vote type.");
+  }
+};
+
 export const PostServices = {
   getPosts,
   createPost,
@@ -188,4 +240,5 @@ export const PostServices = {
   updatePost,
   upvotePost,
   downvotePost,
+  undoVote,
 };
