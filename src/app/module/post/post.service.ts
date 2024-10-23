@@ -232,6 +232,26 @@ const undoVote = async (
     throw new AppError(httpStatus.BAD_REQUEST, "Invalid vote type.");
   }
 };
+const getPostDetails = async (postId: string) => {
+  const post = await PostModel.findById(postId)
+    .populate({
+      path: "author",
+    })
+    .populate({
+      path: "comments",
+      populate: {
+        path: "author",
+      },
+    })
+    .populate("upvotedBy")
+    .populate("downvotedBy");
+
+  if (!post) {
+    throw new AppError(httpStatus.NOT_FOUND, "Post not found.");
+  }
+
+  return post;
+};
 
 export const PostServices = {
   getPosts,
@@ -241,4 +261,5 @@ export const PostServices = {
   upvotePost,
   downvotePost,
   undoVote,
+  getPostDetails,
 };
