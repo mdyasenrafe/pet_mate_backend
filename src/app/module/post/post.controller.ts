@@ -99,3 +99,15 @@ export const undoVoteHandler = catchAsync(
     });
   }
 );
+
+export const getPostDetailsHandler = catchAsync(
+  async (req: Request, res: Response) => {
+    const postId = req.params.postId;
+    const post = await PostServices.getPostDetails(postId);
+
+    sendResponse(res, {
+      message: "Post details fetched successfully",
+      data: post,
+    });
+  }
+);
