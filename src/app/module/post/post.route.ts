@@ -8,6 +8,7 @@ import {
   downvotePostHandler,
   getPostsHandler,
   undoVoteHandler,
+  getPostDetailsHandler,
 } from "./post.controller";
 import { authenticateToken } from "../../middlewares/authMiddleware";
 import { UserRolesObject } from "../user/user.constant";
@@ -15,13 +16,13 @@ import { validateRequest } from "../../middlewares/validateRequest";
 import { PostValidations } from "./post.validation";
 
 const router = Router();
-// public routes
+
 router.get("/random", getRandomPostsHandler);
 
-// private routes
 router.use(authenticateToken(UserRolesObject.admin, UserRolesObject.user));
 
 router.get("/", getPostsHandler);
+router.get("/:postId/details", getPostDetailsHandler);
 router.post(
   "/",
   validateRequest(PostValidations.createPostValidation),
