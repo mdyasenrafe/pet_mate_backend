@@ -24,5 +24,6 @@ export type TPost = {
   commentCount: number;
   upvotedBy: mongoose.Types.ObjectId[];
   downvotedBy: mongoose.Types.ObjectId[];
+  comments: mongoose.Types.ObjectId[];
   status: TPostStatus;
 };

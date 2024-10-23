@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { TFile, TPost } from "./post.type";
+import { TFile, TPost } from "../post/post.type";
 
 const FileSchema = new Schema<TFile>({
   url: {
@@ -48,6 +48,12 @@ const PostSchema = new Schema<TPost>(
       type: Number,
       default: 0,
     },
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "comment",
+      },
+    ],
     upvotedBy: [
       {
         type: Schema.Types.ObjectId,
