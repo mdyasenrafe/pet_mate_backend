@@ -47,10 +47,6 @@ const getPosts = async (query: Record<string, unknown>, userId?: string) => {
   const result = await postQuery.modelQuery;
   const meta = await postQuery.countTotal();
 
-  if (!result.length) {
-    throw new AppError(httpStatus.NOT_FOUND, "No posts found.");
-  }
-
   return {
     result,
     meta,
