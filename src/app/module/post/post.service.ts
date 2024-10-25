@@ -53,6 +53,34 @@ const getPosts = async (query: Record<string, unknown>, userId?: string) => {
   };
 };
 
+const getMyPosts = async (
+  query: Record<string, unknown>,
+  userId: Types.ObjectId
+) => {
+  const searchableFields = ["title", "content"];
+
+  const postQuery = new QueryBuilder(
+    PostModel.find({ author: userId })
+      .populate("author")
+      .populate("upvotedBy")
+      .populate("downvotedBy"),
+    query
+  )
+    .search(searchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await postQuery.modelQuery;
+  const meta = await postQuery.countTotal();
+
+  return {
+    result,
+    meta,
+  };
+};
+
 const createPost = async (data: TPost, userId: Types.ObjectId) => {
   data["author"] = userId;
   if (data.monetization) {
