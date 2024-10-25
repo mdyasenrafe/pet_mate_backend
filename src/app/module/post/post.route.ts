@@ -9,6 +9,7 @@ import {
   getPostsHandler,
   undoVoteHandler,
   getPostDetailsHandler,
+  getMyPostsHandler,
 } from "./post.controller";
 import { authenticateToken } from "../../middlewares/authMiddleware";
 import { UserRolesObject } from "../user/user.constant";
@@ -22,6 +23,7 @@ router.get("/random", getRandomPostsHandler);
 router.use(authenticateToken(UserRolesObject.admin, UserRolesObject.user));
 
 router.get("/", getPostsHandler);
+router.get("/my-posts", getMyPostsHandler);
 router.get("/:postId/details", getPostDetailsHandler);
 router.post(
   "/",
