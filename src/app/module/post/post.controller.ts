@@ -15,6 +15,7 @@ export const getRandomPostsHandler = catchAsync(
     });
   }
 );
+
 export const getPostsHandler = catchAsync(
   async (req: Request, res: Response) => {
     const query = req.query;
@@ -24,6 +25,21 @@ export const getPostsHandler = catchAsync(
 
     sendResponse(res, {
       message: "Posts fetched successfully",
+      data: result,
+      meta,
+    });
+  }
+);
+
+export const getMyPostsHandler = catchAsync(
+  async (req: Request, res: Response) => {
+    const query = req.query;
+    const userId = req.user.userId;
+
+    const { result, meta } = await PostServices.getMyPosts(query, userId);
+
+    sendResponse(res, {
+      message: "Your posts fetched successfully",
       data: result,
       meta,
     });

@@ -286,4 +286,5 @@ export const PostServices = {
   downvotePost,
   undoVote,
   getPostDetails,
+  getMyPosts,
 };
