@@ -35,7 +35,7 @@ const updateUserIntoDB = async (
 
 const addFollower = async (
   userId: Types.ObjectId,
-  followerId: Types.ObjectId
+  followerId: string | Types.ObjectId
 ) => {
   const session = await startSession();
   session.startTransaction();
@@ -51,7 +51,9 @@ const addFollower = async (
       throw new AppError(httpStatus.NOT_FOUND, "Follower not found.");
     }
 
-    const isAlreadyFollowing = user.followers.includes(followerId);
+    const isAlreadyFollowing = user.followers.includes(
+      followerId as Types.ObjectId
+    );
     const isAlreadyFollowedBy = follower.following.includes(userId);
 
     if (!isAlreadyFollowing && !isAlreadyFollowedBy) {
@@ -84,7 +86,7 @@ const addFollower = async (
 
 const removeFollower = async (
   userId: Types.ObjectId,
-  followerId: Types.ObjectId
+  followerId: string | Types.ObjectId
 ) => {
   const session = await startSession();
   session.startTransaction();
