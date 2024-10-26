@@ -11,7 +11,7 @@ router.get("/random", UserControllers.getRandomUsers);
 
 router.use(authenticateToken(UserRolesObject.admin, UserRolesObject.user));
 
-router.get("/users", UserControllers.getRandomUsers);
+router.get("/", UserControllers.getRandomUsers);
 
 router.get(
   "/me",
