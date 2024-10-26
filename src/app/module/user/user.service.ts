@@ -8,7 +8,10 @@ import { AppError } from "../../errors/AppError";
 import QueryBuilder from "../../builder/queryBuilder";
 
 const getUserFromDB = async (id: Types.ObjectId) => {
-  const result = await UserModel.findById(id);
+  const result = await UserModel.findById(id)
+    .populate("followers")
+    .populate("following");
+
   return result;
 };
 
@@ -29,7 +32,9 @@ const updateUserIntoDB = async (
   const result = await UserModel.findByIdAndUpdate(userId, payload, {
     new: true,
     runValidators: true,
-  });
+  })
+    .populate("followers")
+    .populate("following");
   return result;
 };
 
@@ -75,7 +80,11 @@ const addFollower = async (
     }
 
     await session.commitTransaction();
-    return user;
+    const response = await UserModel.findById(userId)
+      .populate("followers")
+      .populate("following")
+      .session(session);
+    return response;
   } catch (error) {
     await session.abortTransaction();
     throw error;
@@ -115,7 +124,11 @@ const removeFollower = async (
     );
 
     await session.commitTransaction();
-    return await UserModel.findById(userId).populate("followers");
+    const response = await UserModel.findById(userId)
+      .populate("followers")
+      .populate("following")
+      .session(session);
+    return response;
   } catch (error) {
     await session.abortTransaction();
     throw error;
