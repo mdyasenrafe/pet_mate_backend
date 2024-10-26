@@ -7,16 +7,25 @@ import { authenticateToken } from "../../middlewares/authMiddleware";
 
 const router = express.Router();
 
+router.get("/random", UserControllers.getRandomUsers);
+
+router.use(authenticateToken(UserRolesObject.admin, UserRolesObject.user));
+
+router.get("/users", UserControllers.getRandomUsers);
+
 router.get(
   "/me",
-  authenticateToken(UserRolesObject.admin, UserRolesObject.user),
+
   UserControllers.getProfile
 );
+
 router.put(
   "/me",
-  authenticateToken(UserRolesObject.admin, UserRolesObject.user),
   validateRequest(UserValidations.userUpdateSchema),
   UserControllers.updateProfile
 );
+
+router.post("/follow/:followerId", UserControllers.addFollower);
+router.delete("/unfollow/:followerId", UserControllers.removeFollower);
 
 export const userRoutes = router;

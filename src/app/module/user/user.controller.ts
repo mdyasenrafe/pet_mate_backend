@@ -52,6 +52,15 @@ const getRandomUsers = catchAsync(async (req, res) => {
     meta: result.meta,
   });
 });
+const getUsers = catchAsync(async (req, res) => {
+  const userId = req?.user?.userId;
+  const result = await Userservices.getRandomUsers(req.query, userId);
+  sendResponse(res, {
+    message: "Random users retrieved successfully",
+    data: result.result,
+    meta: result.meta,
+  });
+});
 
 export const UserControllers = {
   getProfile,
@@ -59,4 +68,5 @@ export const UserControllers = {
   addFollower,
   removeFollower,
   getRandomUsers,
+  getUsers,
 };

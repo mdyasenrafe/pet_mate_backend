@@ -124,8 +124,17 @@ const removeFollower = async (
   }
 };
 
-const getRandomUsers = async (query: Record<string, unknown>) => {
-  const queryBuilder = new QueryBuilder(UserModel.find(), query)
+const getRandomUsers = async (
+  query: Record<string, unknown>,
+  userId?: string
+) => {
+  let userFilter: Record<string, unknown> = {};
+
+  if (userId) {
+    userFilter = { _id: { $ne: userId } };
+  }
+
+  const queryBuilder = new QueryBuilder(UserModel.find(userFilter), query)
     .filter()
     .sort()
     .paginate()
