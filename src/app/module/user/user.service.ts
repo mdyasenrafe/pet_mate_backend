@@ -118,7 +118,7 @@ const removeFollower = async (
 
     await UserModel.findByIdAndUpdate(
       followerId,
-      { $pull: { followers: userId, following: followerId } },
+      { $pull: { followers: userId, following: userId } },
       { new: true, runValidators: true, session }
     );
 
