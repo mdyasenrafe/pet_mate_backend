@@ -19,7 +19,10 @@ const createUserIntoDB = async (payload: TUser) => {
 };
 
 const signinUser = async (email: string, password: string) => {
-  const user = await UserModel.findOne({ email }).select("+password");
+  const user = await UserModel.findOne({ email })
+    .select("+password")
+    .populate("following")
+    .populate("followers");
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
   }
