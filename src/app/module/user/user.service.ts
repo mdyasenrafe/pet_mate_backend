@@ -137,17 +137,19 @@ const removeFollower = async (
   }
 };
 
-const getRandomUsers = async (
+const getRandomUsersFromDB = async (
   query: Record<string, unknown>,
   userId?: string
 ) => {
+  const searchableFields = ["name"];
   let userFilter: Record<string, unknown> = {};
 
   if (userId) {
     userFilter = { _id: { $ne: userId } };
   }
 
-  const queryBuilder = new QueryBuilder(UserModel.find(userFilter), query)
+  const queryBuilder = new QueryBuilder(UserModel.find(), query)
+    .search(searchableFields)
     .filter()
     .sort()
     .paginate()
@@ -155,6 +157,10 @@ const getRandomUsers = async (
 
   const meta = await queryBuilder.countTotal();
   const result = await queryBuilder.modelQuery;
+  console.log("result => ", result);
+  // anotther way to result
+  const result2 = await UserModel.find();
+  console.log("result 2=> ", result2);
   return {
     result,
     meta,
@@ -166,5 +172,5 @@ export const Userservices = {
   updateUserIntoDB,
   addFollower,
   removeFollower,
-  getRandomUsers,
+  getRandomUsersFromDB,
 };

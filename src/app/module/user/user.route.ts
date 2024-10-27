@@ -11,20 +11,17 @@ router.get("/random", UserControllers.getRandomUsers);
 
 router.use(authenticateToken(UserRolesObject.admin, UserRolesObject.user));
 
-router.get("/", UserControllers.getRandomUsers);
-
+router.get("/", UserControllers.getUsers);
 router.get(
   "/me",
 
   UserControllers.getProfile
 );
-
 router.put(
   "/me",
   validateRequest(UserValidations.userUpdateSchema),
   UserControllers.updateProfile
 );
-
 router.post("/follow/:followerId", UserControllers.addFollower);
 router.delete("/unfollow/:followerId", UserControllers.removeFollower);
 

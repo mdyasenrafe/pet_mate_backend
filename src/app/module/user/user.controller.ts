@@ -45,7 +45,7 @@ const removeFollower = catchAsync(async (req, res) => {
 });
 
 const getRandomUsers = catchAsync(async (req, res) => {
-  const result = await Userservices.getRandomUsers(req.query);
+  const result = await Userservices.getRandomUsersFromDB(req.query);
   sendResponse(res, {
     message: "Random users retrieved successfully",
     data: result.result,
@@ -54,7 +54,7 @@ const getRandomUsers = catchAsync(async (req, res) => {
 });
 const getUsers = catchAsync(async (req, res) => {
   const userId = req?.user?.userId;
-  const result = await Userservices.getRandomUsers(req.query, userId);
+  const result = await Userservices.getRandomUsersFromDB(req.query, userId);
   sendResponse(res, {
     message: "Random users retrieved successfully",
     data: result.result,
