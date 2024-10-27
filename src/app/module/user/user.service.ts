@@ -148,7 +148,7 @@ const getRandomUsersFromDB = async (
     userFilter = { _id: { $ne: userId } };
   }
 
-  const queryBuilder = new QueryBuilder(UserModel.find(), query)
+  const queryBuilder = new QueryBuilder(UserModel.find(userFilter), query)
     .search(searchableFields)
     .filter()
     .sort()
