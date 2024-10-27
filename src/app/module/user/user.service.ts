@@ -56,7 +56,7 @@ const addFollower = async (
       throw new AppError(httpStatus.NOT_FOUND, "Follower not found.");
     }
 
-    const isAlreadyFollowing = user.followers.includes(
+    const isAlreadyFollowing = user.following.includes(
       followerId as Types.ObjectId
     );
 
