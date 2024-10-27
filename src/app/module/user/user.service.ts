@@ -59,17 +59,16 @@ const addFollower = async (
     const isAlreadyFollowing = user.followers.includes(
       followerId as Types.ObjectId
     );
-    const isAlreadyFollowedBy = follower.following.includes(userId);
 
-    if (!isAlreadyFollowing && !isAlreadyFollowedBy) {
+    if (!isAlreadyFollowing) {
       await UserModel.findByIdAndUpdate(
         userId,
-        { $push: { followers: followerId } },
+        { $push: { following: followerId } },
         { new: true, runValidators: true, session }
       );
       await UserModel.findByIdAndUpdate(
         followerId,
-        { $push: { following: userId } },
+        { $push: { followers: userId } },
         { new: true, runValidators: true, session }
       );
     } else {
@@ -113,13 +112,13 @@ const removeFollower = async (
 
     await UserModel.findByIdAndUpdate(
       userId,
-      { $pull: { followers: followerId } },
+      { $pull: { following: followerId } },
       { new: true, runValidators: true, session }
     );
 
     await UserModel.findByIdAndUpdate(
       followerId,
-      { $pull: { following: userId } },
+      { $pull: { followers: userId } },
       { new: true, runValidators: true, session }
     );
 
