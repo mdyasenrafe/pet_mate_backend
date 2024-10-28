@@ -55,7 +55,7 @@ const getPosts = async (query: Record<string, unknown>, userId?: string) => {
 
 const getMyPosts = async (
   query: Record<string, unknown>,
-  userId: Types.ObjectId
+  userId: Types.ObjectId | string
 ) => {
   const searchableFields = ["title", "content"];
 

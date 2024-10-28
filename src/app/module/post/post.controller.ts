@@ -34,7 +34,7 @@ export const getPostsHandler = catchAsync(
 export const getMyPostsHandler = catchAsync(
   async (req: Request, res: Response) => {
     const query = req.query;
-    const userId = req.user.userId;
+    const userId = req.params.userId as string;
 
     const { result, meta } = await PostServices.getMyPosts(query, userId);
 

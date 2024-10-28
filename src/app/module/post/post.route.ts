@@ -23,7 +23,7 @@ router.get("/random", getRandomPostsHandler);
 router.use(authenticateToken(UserRolesObject.admin, UserRolesObject.user));
 
 router.get("/", getPostsHandler);
-router.get("/my-posts", getMyPostsHandler);
+router.get("/my-posts/:userId", getMyPostsHandler);
 router.get("/:postId/details", getPostDetailsHandler);
 router.post(
   "/",
