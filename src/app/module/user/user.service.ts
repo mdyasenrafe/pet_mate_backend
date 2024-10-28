@@ -7,7 +7,7 @@ import bcrypt from "bcrypt";
 import { AppError } from "../../errors/AppError";
 import QueryBuilder from "../../builder/queryBuilder";
 
-const getUserFromDB = async (id: Types.ObjectId) => {
+const getUserFromDB = async (id: Types.ObjectId | string) => {
   const result = await UserModel.findById(id)
     .populate("followers")
     .populate("following");

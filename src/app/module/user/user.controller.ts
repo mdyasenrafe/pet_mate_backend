@@ -1,3 +1,4 @@
+import { ObjectId } from "mongoose";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import { Userservices } from "./user.service";
@@ -55,11 +56,10 @@ const getUsers = catchAsync(async (req, res) => {
 
 const getUsersById = catchAsync(async (req, res) => {
   const userId = req?.params?.userId;
-  const result = await Userservices.getRandomUsersFromDB(req.query, userId);
+  const result = await Userservices.getUserFromDB(userId);
   sendResponse(res, {
     message: "Random users retrieved successfully",
-    data: result.result,
-    meta: result.meta,
+    data: result,
   });
 });
 
