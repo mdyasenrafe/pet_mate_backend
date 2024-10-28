@@ -3,15 +3,6 @@ import { sendResponse } from "../../utils/sendResponse";
 import { Userservices } from "./user.service";
 import httpStatus from "http-status";
 
-const getProfile = catchAsync(async (req, res) => {
-  const user = req.user;
-  const result = await Userservices.getUserFromDB(user.userId);
-  sendResponse(res, {
-    message: "User profile retrieved successfully",
-    data: result,
-  });
-});
-
 const updateProfile = catchAsync(async (req, res) => {
   const { user, body } = req;
   const result = await Userservices.updateUserIntoDB(user, body);
@@ -62,11 +53,21 @@ const getUsers = catchAsync(async (req, res) => {
   });
 });
 
+const getUsersById = catchAsync(async (req, res) => {
+  const userId = req?.params?.userId;
+  const result = await Userservices.getRandomUsersFromDB(req.query, userId);
+  sendResponse(res, {
+    message: "Random users retrieved successfully",
+    data: result.result,
+    meta: result.meta,
+  });
+});
+
 export const UserControllers = {
-  getProfile,
   updateProfile,
   addFollower,
   removeFollower,
   getRandomUsers,
   getUsers,
+  getUsersById,
 };

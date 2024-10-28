@@ -12,11 +12,7 @@ router.get("/random", UserControllers.getRandomUsers);
 router.use(authenticateToken(UserRolesObject.admin, UserRolesObject.user));
 
 router.get("/", UserControllers.getUsers);
-router.get(
-  "/me",
-
-  UserControllers.getProfile
-);
+router.get("/me/:userId", UserControllers.getUsersById);
 router.put(
   "/me",
   validateRequest(UserValidations.userUpdateSchema),
