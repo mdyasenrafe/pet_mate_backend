@@ -62,6 +62,32 @@ const getUsersById = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const getAllUsers = catchAsync(async (req, res) => {
+  const { result, meta } = await Userservices.getAllUsersFromDB(req.query);
+  sendResponse(res, {
+    message: "get users fetched successfully",
+    data: result,
+    meta: meta,
+  });
+});
+
+const updateUserRole = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await Userservices.updateUserRoleInDB(id);
+  sendResponse(res, {
+    message: "User role updated successfully",
+    data: result,
+  });
+});
+
+const deleteUser = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  await Userservices.deleteUserFromDB(id);
+  sendResponse(res, {
+    message: "User deleted successfully",
+    data: null,
+  });
+});
 
 export const UserControllers = {
   updateProfile,
@@ -70,4 +96,7 @@ export const UserControllers = {
   getRandomUsers,
   getUsers,
   getUsersById,
+  getAllUsers,
+  updateUserRole,
+  deleteUser,
 };
