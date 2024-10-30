@@ -21,7 +21,7 @@ router.put(
 router.post("/follow/:followerId", UserControllers.addFollower);
 router.delete("/unfollow/:followerId", UserControllers.removeFollower);
 router.get(
-  "/",
+  "/all-users",
   authenticateToken(UserRolesObject.admin),
   UserControllers.getAllUsers
 );
