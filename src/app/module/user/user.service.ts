@@ -165,6 +165,53 @@ const getRandomUsersFromDB = async (
     meta,
   };
 };
+const getAllUsersFromDB = async (query: Record<string, unknown>) => {
+  const searchableFields = ["name"];
+  const usersQuery = new QueryBuilder(UserModel.find({ role: "user" }), query)
+    .search(searchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await usersQuery.modelQuery;
+  const meta = await usersQuery.countTotal();
+  console.log("meta", meta);
+  return {
+    meta,
+    result,
+  };
+};
+
+const updateUserRoleInDB = async (id: string) => {
+  const user = await UserModel.findById(id);
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  const result = await UserModel.findByIdAndUpdate(
+    id,
+    { role: "admin" },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  return result;
+};
+
+const deleteUserFromDB = async (id: string) => {
+  const user = await UserModel.findById(id);
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+  const result = await UserModel.findByIdAndUpdate(
+    id,
+    { status: "deleted" },
+    { new: true }
+  );
+  return result;
+};
 
 export const Userservices = {
   getUserFromDB,
@@ -172,4 +219,7 @@ export const Userservices = {
   addFollower,
   removeFollower,
   getRandomUsersFromDB,
+  getAllUsersFromDB,
+  updateUserRoleInDB,
+  deleteUserFromDB,
 };
