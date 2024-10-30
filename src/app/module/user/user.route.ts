@@ -20,5 +20,20 @@ router.put(
 );
 router.post("/follow/:followerId", UserControllers.addFollower);
 router.delete("/unfollow/:followerId", UserControllers.removeFollower);
+router.get(
+  "/",
+  authenticateToken(UserRolesObject.admin),
+  UserControllers.getAllUsers
+);
+router.put(
+  "/role-update/:id",
+  authenticateToken(UserRolesObject.admin),
+  UserControllers.updateUserRole
+);
+router.delete(
+  "/change-status/:id",
+  authenticateToken(UserRolesObject.admin),
+  UserControllers.deleteUser
+);
 
 export const userRoutes = router;
