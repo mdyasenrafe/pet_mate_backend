@@ -3,10 +3,11 @@ import { validateRequest } from "../../middlewares/validateRequest";
 import { authenticateToken } from "../../middlewares/authMiddleware";
 import { PaymentController } from "./payment.controller";
 import { PaymentValidations } from "./payment.validation";
+import { UserRolesObject } from "../user/user.constant";
 
 const router = Router();
 
-router.use(authenticateToken());
+router.use(authenticateToken(UserRolesObject.admin, UserRolesObject.user));
 
 router.post(
   "/pay",
