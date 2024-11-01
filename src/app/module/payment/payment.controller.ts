@@ -38,7 +38,7 @@ const paymentFailure = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const PremiumController = {
+export const PaymentController = {
   pay,
   paymentSuccess,
   paymentFailure,
