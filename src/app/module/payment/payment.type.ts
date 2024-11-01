@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 
-export type TPremiumType = "premium_plus";
+export type TPremiumType = "premium";
 
 export type TPremium = {
   user: Types.ObjectId;

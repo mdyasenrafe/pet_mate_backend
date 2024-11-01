@@ -10,7 +10,7 @@ const PaymentSchema = new Schema<TPremium>(
     },
     type: {
       type: String,
-      enum: ["premium_plus"],
+      enum: ["premium"],
       required: true,
     },
     paymentIntentId: {

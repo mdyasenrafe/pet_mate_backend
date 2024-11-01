@@ -11,7 +11,7 @@ const initiatePayment = async (userId: string, type: TPremiumType) => {
   if (!user) throw new AppError(httpStatus.NOT_FOUND, "User not found");
 
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: 10000,
+    amount: 99999,
     currency: "usd",
     description: `Subscription for ${type}`,
     metadata: { userId: user._id.toString(), type },
