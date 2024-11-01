@@ -16,8 +16,10 @@ const pay = catchAsync(async (req: Request, res: Response) => {
 
 const paymentSuccess = catchAsync(async (req: Request, res: Response) => {
   const { paymentIntentId } = req.query;
+  const userId = req.user?.userId;
   const premiumSubscription = await PaymentService.handlePaymentSuccess(
-    paymentIntentId as string
+    paymentIntentId as string,
+    userId
   );
 
   sendResponse(res, {

@@ -4,6 +4,7 @@ import httpStatus from "http-status";
 import { TPremiumType } from "./payment.type";
 import { PremiumModel } from "./payment.model";
 import { stripe } from "../../../config";
+import { Types } from "mongoose";
 
 const initiatePayment = async (userId: string, type: TPremiumType) => {
   const user = await UserModel.findById(userId);
@@ -26,7 +27,10 @@ const initiatePayment = async (userId: string, type: TPremiumType) => {
   return { clientSecret: paymentIntent.client_secret };
 };
 
-const handlePaymentSuccess = async (paymentIntentId: string) => {
+const handlePaymentSuccess = async (
+  paymentIntentId: string,
+  userId: Types.ObjectId
+) => {
   const premium = await PremiumModel.findOneAndUpdate(
     { paymentIntentId },
     { isActive: true },
@@ -35,6 +39,15 @@ const handlePaymentSuccess = async (paymentIntentId: string) => {
 
   if (!premium)
     throw new AppError(httpStatus.NOT_FOUND, "Premium subscription not found");
+
+  const user = await UserModel.findOneAndUpdate(
+    { _id: userId },
+    { isPremium: true },
+    { new: true }
+  );
+
+  if (!user) throw new AppError(httpStatus.NOT_FOUND, "User not found");
+
   return premium;
 };
 
