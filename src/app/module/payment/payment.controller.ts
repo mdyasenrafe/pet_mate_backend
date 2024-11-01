@@ -6,11 +6,12 @@ import { PaymentService } from "./payment.service";
 const pay = catchAsync(async (req: Request, res: Response) => {
   const userId = req.user.userId;
   const { type } = req.body;
-  const { clientSecret } = await PaymentService.initiatePayment(userId, type);
+  const { clientSecret, paymentIntentId } =
+    await PaymentService.initiatePayment(userId, type);
 
   sendResponse(res, {
     message: "Payment intent created successfully",
-    data: { clientSecret },
+    data: { clientSecret, paymentIntentId },
   });
 });
 
