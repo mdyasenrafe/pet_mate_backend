@@ -50,7 +50,7 @@ const handlePaymentFailure = async (paymentIntentId: string) => {
   return premium;
 };
 
-export const PremiumService = {
+export const PaymentService = {
   initiatePayment,
   handlePaymentSuccess,
   handlePaymentFailure,
