@@ -13,7 +13,13 @@ router.post(
   validateRequest(PaymentValidations.createPremiumValidation),
   PaymentController.pay
 );
-router.post("/payment-success", PaymentController.paymentSuccess);
-router.post("/payment-failure", PaymentController.paymentFailure);
+router.post(
+  "/payment-success/:paymentIntentId",
+  PaymentController.paymentSuccess
+);
+router.post(
+  "/payment-failure/:paymentIntentId",
+  PaymentController.paymentFailure
+);
 
 export const PaymentRoutes = router;

@@ -15,7 +15,7 @@ const pay = catchAsync(async (req: Request, res: Response) => {
 });
 
 const paymentSuccess = catchAsync(async (req: Request, res: Response) => {
-  const { paymentIntentId } = req.query;
+  const paymentIntentId = req?.params?.paymentIntentId;
   const userId = req.user?.userId;
   const premiumSubscription = await PaymentService.handlePaymentSuccess(
     paymentIntentId as string,
@@ -29,7 +29,7 @@ const paymentSuccess = catchAsync(async (req: Request, res: Response) => {
 });
 
 const paymentFailure = catchAsync(async (req: Request, res: Response) => {
-  const { paymentIntentId } = req.query;
+  const paymentIntentId = req?.params?.paymentIntentId;
   const premiumSubscription = await PaymentService.handlePaymentFailure(
     paymentIntentId as string
   );
