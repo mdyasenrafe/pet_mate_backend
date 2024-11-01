@@ -16,6 +16,7 @@ const initiatePayment = async (userId: string, type: TPremiumType) => {
     description: `Subscription for ${type}`,
     metadata: { userId: user._id.toString(), type },
   });
+  console;
 
   const premiumSubscription = await PremiumModel.create({
     user: user._id,
@@ -24,7 +25,10 @@ const initiatePayment = async (userId: string, type: TPremiumType) => {
     isActive: false,
   });
 
-  return { clientSecret: paymentIntent.client_secret };
+  return {
+    clientSecret: paymentIntent.client_secret,
+    paymentIntentId: paymentIntent.id,
+  };
 };
 
 const handlePaymentSuccess = async (
