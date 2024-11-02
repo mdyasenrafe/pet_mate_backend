@@ -24,7 +24,7 @@ const signin = catchAsync(async (req: Request, res: Response) => {
 
 const changePassword = catchAsync(async (req: Request, res: Response) => {
   const { oldPassword, newPassword } = req.body;
-  const userId = req.user.id;
+  const userId = req.user.userId;
 
   const result = await AuthServices.changePassword(
     userId,
