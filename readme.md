@@ -24,7 +24,7 @@ PetMate is a platform dedicated to pet care enthusiasts, where users can share a
 
 ## Technology Stack
 
-- **Frontend**: React, Redux, TypeScript, Tailwind CSS, Ant Design
+- **Frontend**: Next.js, Redux, TypeScript, Tailwind CSS, Ant Design
 - **Backend**: Node.js, Express, MongoDB
 - **Authentication**: JWT (JSON Web Tokens)
 - **Payment Integration**: Stripe
@@ -54,24 +54,18 @@ Before you begin, ensure you have met the following requirements:
 Clone the repository and install dependencies:
 
 ```bash
-git clone https://github.com/mdyasenrafe/pet_mate_backend.git
-cd pet_mate_backend
+git clone https://github.com/mdyasenrafe/pet_mate_front_end.git
+cd pet_mate_front_end
 yarn
 ```
 
 
 #### Running the Application
 
-To start the application  development:
+To start the application :
 
 ```bash
-yarn start:dev
-```
-
-To start the application production:
-
-```bash
-yarn start:prod
+yarn start
 ```
 
 
