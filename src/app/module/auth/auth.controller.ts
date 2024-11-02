@@ -22,7 +22,23 @@ const signin = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const changePassword = catchAsync(async (req: Request, res: Response) => {
+  const { oldPassword, newPassword } = req.body;
+  const userId = req.user.id;
+
+  const result = await AuthServices.changePassword(
+    userId,
+    oldPassword,
+    newPassword
+  );
+  sendResponse(res, {
+    data: result,
+    message: "Password changed successfully",
+  });
+});
+
 export const AuthControllers = {
   register,
   signin,
+  changePassword,
 };

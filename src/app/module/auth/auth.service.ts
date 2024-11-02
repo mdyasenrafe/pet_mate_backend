@@ -1,7 +1,7 @@
 import httpStatus from "http-status";
+import bcrypt from "bcrypt";
 import { TUser } from "../user/user.types";
 import { UserModel } from "../user/user.model";
-import bcrypt from "bcrypt";
 import { AppError } from "../../errors/AppError";
 import { generateToken } from "../../utils/tokenGenerateFunction";
 
@@ -39,7 +39,34 @@ const signinUser = async (email: string, password: string) => {
   return { data: user, token };
 };
 
+const changePassword = async (
+  userId: string,
+  oldPassword: string,
+  newPassword: string
+) => {
+  const user = await UserModel.findById(userId).select("+password");
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isMatch) {
+    throw new AppError(httpStatus.UNAUTHORIZED, "Old password is incorrect");
+  }
+
+  const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+
+  const result = await UserModel.findOneAndUpdate(
+    { _id: userId },
+    { password: hashedNewPassword },
+    { new: true }
+  );
+
+  return result;
+};
+
 export const AuthServices = {
   createUserIntoDB,
   signinUser,
+  changePassword,
 };
