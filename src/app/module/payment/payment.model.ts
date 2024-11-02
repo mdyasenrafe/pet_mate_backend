@@ -5,7 +5,7 @@ const PaymentSchema = new Schema<TPremium>(
   {
     user: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "user",
       required: true,
     },
     type: {
