@@ -69,7 +69,7 @@ const handlePaymentFailure = async (paymentIntentId: string) => {
 };
 const getAllPaymentHistoryFromDB = async (query: Record<string, unknown>) => {
   const paymentQuery = new QueryBuilder(
-    PremiumModel.find().populate("User"),
+    PremiumModel.find().populate("user"),
     query
   )
     .filter()
