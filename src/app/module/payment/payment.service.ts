@@ -5,6 +5,7 @@ import { TPremiumType } from "./payment.type";
 import { PremiumModel } from "./payment.model";
 import { stripe } from "../../../config";
 import { Types } from "mongoose";
+import QueryBuilder from "../../builder/queryBuilder";
 
 const initiatePayment = async (userId: string, type: TPremiumType) => {
   const user = await UserModel.findById(userId);
@@ -66,9 +67,28 @@ const handlePaymentFailure = async (paymentIntentId: string) => {
     throw new AppError(httpStatus.NOT_FOUND, "Premium subscription not found");
   return premium;
 };
+const getAllPaymentHistory = async (query: Record<string, unknown>) => {
+  const paymentQuery = new QueryBuilder(
+    PremiumModel.find().populate("User"),
+    query
+  )
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await paymentQuery.modelQuery;
+  const meta = await paymentQuery.countTotal();
+
+  return {
+    result,
+    meta,
+  };
+};
 
 export const PaymentService = {
   initiatePayment,
   handlePaymentSuccess,
   handlePaymentFailure,
+  getAllPaymentHistory,
 };
