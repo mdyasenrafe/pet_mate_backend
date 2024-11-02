@@ -23,4 +23,10 @@ router.post(
   PaymentController.paymentFailure
 );
 
+router.get(
+  "/payment-history",
+  authenticateToken(UserRolesObject.admin),
+  PaymentController.getAllPaymentHistory
+);
+
 export const PaymentRoutes = router;

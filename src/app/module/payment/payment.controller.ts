@@ -41,8 +41,21 @@ const paymentFailure = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllPaymentHistory = catchAsync(async (req: Request, res: Response) => {
+  const query = req.query;
+  const { result, meta } =
+    await PaymentService.getAllPaymentHistoryFromDB(query);
+
+  sendResponse(res, {
+    message: "Payment history retrieved successfully",
+    data: result,
+    meta,
+  });
+});
+
 export const PaymentController = {
   pay,
   paymentSuccess,
   paymentFailure,
+  getAllPaymentHistory,
 };

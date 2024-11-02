@@ -67,7 +67,7 @@ const handlePaymentFailure = async (paymentIntentId: string) => {
     throw new AppError(httpStatus.NOT_FOUND, "Premium subscription not found");
   return premium;
 };
-const getAllPaymentHistory = async (query: Record<string, unknown>) => {
+const getAllPaymentHistoryFromDB = async (query: Record<string, unknown>) => {
   const paymentQuery = new QueryBuilder(
     PremiumModel.find().populate("User"),
     query
@@ -90,5 +90,5 @@ export const PaymentService = {
   initiatePayment,
   handlePaymentSuccess,
   handlePaymentFailure,
-  getAllPaymentHistory,
+  getAllPaymentHistoryFromDB,
 };
